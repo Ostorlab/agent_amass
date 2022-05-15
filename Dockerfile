@@ -1,3 +1,11 @@
+FROM golang:1.16-alpine as amass_build
+RUN apk --no-cache add git
+RUN git clone --depth 1 https://github.com/OWASP/Amass.git /opt/amass \
+    && cd /opt/amass \
+    && go get ./... &&  \
+    go install ./...
+
+
 FROM python:3.8-alpine as base
 FROM base as builder
 RUN apk add build-base
@@ -5,7 +13,11 @@ RUN mkdir /install
 WORKDIR /install
 COPY requirement.txt /requirement.txt
 RUN pip install --prefix=/install -r /requirement.txt
+
+
 FROM base
+RUN apk --no-cache add ca-certificates
+COPY --from=amass_build /go/bin/amass /bin/amass
 COPY --from=builder /install /usr/local
 RUN mkdir -p /app/agent
 ENV PYTHONPATH=/app
