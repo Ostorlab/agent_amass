@@ -1,12 +1,10 @@
 """Pytest fixture for the Amass agent."""
-import json
 import pathlib
 
 import pytest
 from ostorlab.agent import definitions as agent_definitions
 from ostorlab.agent import message
 from ostorlab.runtimes import definitions as runtime_definitions
-from ostorlab.utils import defintions as utils_definitions
 
 from agent import amass_agent
 
@@ -34,4 +32,3 @@ def test_agent():
             args=[],
             healthcheck_port=5301)
         return amass_agent.AmassAgent(definition, settings)
-
