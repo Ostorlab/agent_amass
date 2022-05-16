@@ -12,9 +12,9 @@ _Amass performs network mapping of attack surfaces and external asset discovery 
 <img src="https://github.com/Ostorlab/agent_amass/blob/main/images/cover.png" alt="agent-amass" />
 </p>
 
-This repository is an implementation of [Ostorlab Agent](https://pypi.org/project/ostorlab/) for [amass](https://github.com/projectdiscovery/amass) DNS toolkitby by ProjectDiscovery.
+This repository is an implementation of [Ostorlab Agent](https://pypi.org/project/ostorlab/) for [amass](https://github.com/OWASP/Amass) by OWASP.
   ## Getting Started
-  The Amass Agent works collectively with other agents. It's job is to reverse a subdomain name and send all the identified records to the other agents reponsible for scanning those records.
+  The Amass Agent works collectively with other agents. It's job is to reverse a subdomain name and send all the identified records to the other agents responsible for scanning those records.
   To perform your first scan, simply run the following command:
   ```shell
   ostorlab scan run --install --agent agent/ostorlab/amass --agent agent/ostorlab/subfinder domain-name your-domain.com
