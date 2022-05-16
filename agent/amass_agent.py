@@ -23,7 +23,7 @@ STORAGE_NAME = 'agent_amass_storage'
 
 
 class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
-    """Hello world agent."""
+    """Amass agent with reverse whois lookup and subdomain enumeration."""
 
     def __init__(self,
                  agent_definition: agent_definitions.AgentDefinition,
@@ -34,7 +34,8 @@ class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
 
     def process(self, message: m.Message) -> None:
         """Process messages of type  v3.asset.domain_name
-        Runs Subfinder on the domain name and emits back the findings.
+        Runs amass on the domain name and emits back the findings.
+
         Args:
             message: The received message.
         """

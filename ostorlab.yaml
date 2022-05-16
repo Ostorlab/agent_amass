@@ -1,6 +1,7 @@
 kind: Agent
 name: amass
 version: 0.0.1
+image: images/cover.png
 description: Amass performs network mapping of attack surfaces and external asset discovery using open source information gathering and active reconnaissance techniques.
 license: Apache-2.0
 source: https://github.com/Ostorlab/agent_amass
