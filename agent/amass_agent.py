@@ -20,6 +20,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 STORAGE_NAME = 'agent_amass_storage'
+DEFAULT_TIMEOUT_MINUTES = 10
 
 
 class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
@@ -48,11 +49,11 @@ class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
         canonalized_domain = canonalized_domain.fld
 
         if self.set_add(STORAGE_NAME, canonalized_domain) is True:
-            subdomains = amass.intel_whois(domain_name, timeout=10)
+            subdomains = amass.intel_whois(domain_name, timeout=DEFAULT_TIMEOUT_MINUTES)
             for sub in subdomains:
                 self.emit(selector='v3.asset.domain_name', data={'name': sub})
 
-            subdomains = amass.enum_subdomain(domain_name, timeout=10)
+            subdomains = amass.enum_subdomain(domain_name, timeout=DEFAULT_TIMEOUT_MINUTES)
             for sub in subdomains:
                 self.emit(selector='v3.asset.domain_name', data={'name': sub})
         else:
