@@ -18,7 +18,6 @@ logging.basicConfig(
     handlers=[rich_logging.RichHandler(rich_tracebacks=True)]
 )
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
 STORAGE_NAME = 'agent_amass_storage'
 DEFAULT_TIMEOUT_MINUTES = 10
 
