@@ -48,12 +48,16 @@ class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
         canonalized_domain = canonalized_domain.fld
 
         if self.set_add(STORAGE_NAME, canonalized_domain) is True:
+            logger.info('Collecting domains using reverse whois lookup:')
             subdomains = amass.intel_whois(domain_name, timeout=DEFAULT_TIMEOUT_MINUTES)
             for sub in subdomains:
+                logger.info('Found: %s', sub)
                 self.emit(selector='v3.asset.domain_name', data={'name': sub})
 
+            logger.info('Collecting subdomains using enumeration:')
             subdomains = amass.enum_subdomain(domain_name, timeout=DEFAULT_TIMEOUT_MINUTES)
             for sub in subdomains:
+                logger.info('Found: %s', sub)
                 self.emit(selector='v3.asset.domain_name', data={'name': sub})
         else:
             logger.info('%s has already been processed. skipping for now.', domain_name)
