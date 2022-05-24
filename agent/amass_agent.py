@@ -18,7 +18,8 @@ logging.basicConfig(
     handlers=[rich_logging.RichHandler(rich_tracebacks=True)]
 )
 logger = logging.getLogger(__name__)
-STORAGE_NAME = 'agent_amass_storage'
+STORAGE_NAME_WHOIS = b'agent_amass_storage_whois'
+STORAGE_NAME_SUBDOMAIN = b'agent_amass_storage_subdomain'
 DEFAULT_TIMEOUT_MINUTES = 10
 
 
@@ -47,20 +48,25 @@ class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
 
         canonalized_domain = canonalized_domain.fld
 
-        if self.set_add(STORAGE_NAME, canonalized_domain) is True:
-            logger.info('Collecting domains using reverse whois lookup:')
+        if self.set_add(STORAGE_NAME_WHOIS, canonalized_domain) is True:
+            logger.info('Collecting domains using reverse whois lookup for %s:', domain_name)
             subdomains = amass.intel_whois(domain_name, timeout=DEFAULT_TIMEOUT_MINUTES)
             for sub in subdomains:
                 logger.info('Found: %s', sub)
+                # Reverse whois lookup will yield the same result for all. This is to avoid processing the same domains.
+                self.set_add(STORAGE_NAME_WHOIS, sub)
                 self.emit(selector='v3.asset.domain_name', data={'name': sub})
+        else:
+            logger.info('WHOIS %s has already been processed. skipping for now.', domain_name)
 
-            logger.info('Collecting subdomains using enumeration:')
+        if self.set_add(STORAGE_NAME_SUBDOMAIN, canonalized_domain) is True:
+            logger.info('Collecting subdomains using enumeration for %s:', domain_name)
             subdomains = amass.enum_subdomain(domain_name, timeout=DEFAULT_TIMEOUT_MINUTES)
             for sub in subdomains:
                 logger.info('Found: %s', sub)
                 self.emit(selector='v3.asset.domain_name', data={'name': sub})
         else:
-            logger.info('%s has already been processed. skipping for now.', domain_name)
+            logger.info('SUBDOMAIN %s has already been processed. skipping for now.', domain_name)
 
 
 if __name__ == '__main__':

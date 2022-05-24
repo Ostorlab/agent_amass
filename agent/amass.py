@@ -17,11 +17,15 @@ def intel_whois(domain: str, timeout: Optional[int] = None) -> List[str]:
     if timeout is not None:
         command.extend(['-timeout', str(timeout)])
 
-    result = subprocess.run(command, capture_output=True, check=False)
-    if result.returncode != 0:
+    try:
+        # The timeout is not always respected by the amass, we enforce ours on top of it with an extra minute.
+        result = subprocess.run(command, capture_output=True, check=False, timeout=(timeout + 1) * 60)
+        if result.returncode != 0:
+            return []
+        else:
+            return result.stdout.decode().splitlines()
+    except subprocess.TimeoutExpired:
         return []
-    else:
-        return result.stdout.decode().splitlines()
 
 
 def enum_subdomain(domain: str, timeout: Optional[int] = None) -> List[str]:
@@ -38,8 +42,12 @@ def enum_subdomain(domain: str, timeout: Optional[int] = None) -> List[str]:
     if timeout is not None:
         command.extend(['-timeout', str(timeout)])
 
-    result = subprocess.run(command, capture_output=True, check=False)
-    if result.returncode != 0:
+    try:
+        # The timeout is not always respected by the amass, we enforce ours on top of it with an extra minute.
+        result = subprocess.run(command, capture_output=True, check=False, timeout=(timeout + 1) * 60)
+        if result.returncode != 0:
+            return []
+        else:
+            return result.stdout.decode().splitlines()
+    except subprocess.TimeoutExpired:
         return []
-    else:
-        return result.stdout.decode().splitlines()
