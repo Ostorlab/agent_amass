@@ -6,7 +6,7 @@ RUN git clone --depth 1 https://github.com/OWASP/Amass.git /opt/amass \
     go install ./...
 
 
-FROM python:3.8-alpine as base
+FROM python:3.10-alpine as base
 FROM base as builder
 RUN apk add build-base
 RUN mkdir /install
