@@ -1,6 +1,6 @@
 kind: Agent
 name: amass
-version: 0.2.1
+version: 0.2.2
 image: images/cover.png
 description: |
   _Amass performs network mapping of attack surfaces and external asset discovery using open source information gathering and active reconnaissance techniques.._
