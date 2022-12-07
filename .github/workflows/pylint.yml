@@ -33,7 +33,7 @@ jobs:
         python -m pip install -r tests/test-requirement.txt
     - name: Running Black.
       uses: psf/black@stable
-        with:
+      with:
           options: "--check"
     - name: Running linter.
       run: |
