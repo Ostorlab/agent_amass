@@ -13,13 +13,15 @@ def intel_whois(domain: str, timeout: Optional[int] = None) -> List[str]:
     Returns:
         List of domains with same whois org.
     """
-    command = ['amass', 'intel', '-whois', '-d', domain]
+    command = ["amass", "intel", "-whois", "-d", domain]
     if timeout is not None:
-        command.extend(['-timeout', str(timeout)])
+        command.extend(["-timeout", str(timeout)])
 
     try:
         # The timeout is not always respected by the amass, we enforce ours on top of it with an extra minute.
-        result = subprocess.run(command, capture_output=True, check=False, timeout=(timeout + 1) * 60)
+        result = subprocess.run(
+            command, capture_output=True, check=False, timeout=(timeout + 1) * 60
+        )
         if result.returncode != 0:
             return []
         else:
@@ -38,13 +40,15 @@ def enum_subdomain(domain: str, timeout: Optional[int] = None) -> List[str]:
     Returns:
         List of subdomains.
     """
-    command = ['amass', 'enum', '-brute', '-min-for-recursive', '2', '-d', domain]
+    command = ["amass", "enum", "-brute", "-min-for-recursive", "2", "-d", domain]
     if timeout is not None:
-        command.extend(['-timeout', str(timeout)])
+        command.extend(["-timeout", str(timeout)])
 
     try:
         # The timeout is not always respected by the amass, we enforce ours on top of it with an extra minute.
-        result = subprocess.run(command, capture_output=True, check=False, timeout=(timeout + 1) * 60)
+        result = subprocess.run(
+            command, capture_output=True, check=False, timeout=(timeout + 1) * 60
+        )
         if result.returncode != 0:
             return []
         else:
