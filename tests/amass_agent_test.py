@@ -27,3 +27,17 @@ def testAgentAmass_withWhoisReverseLookup_returnsDomainList(
     test_agent.process(scan_message)
     assert len(agent_mock) > 0
     assert agent_mock[0].selector == "v3.asset.domain_name"
+
+
+def testAgentAmass_withFlagsSetFalse_notCallIsMade(
+    scan_message, no_test_agent, agent_mock, agent_persist_mock, fp, mocker
+):
+    """Tests running the agent and emitting extra subdomains."""
+    intel_whois_mock = mocker.patch("agent.amass.intel_whois")
+    enum_subdomain_mock = mocker.patch("agent.amass.enum_subdomain")
+
+    no_test_agent.process(scan_message)
+
+    assert len(agent_mock) == 0
+    assert intel_whois_mock.call_count == 0
+    assert enum_subdomain_mock.call_count == 0
