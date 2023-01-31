@@ -57,6 +57,6 @@ def test_agent():
             bus_exchange_topic="NA",
             redis_url="redis://redis",
             args=[],
-            healthcheck_port=5301,
+            healthcheck_port=5302,
         )
         return amass_agent.AmassAgent(definition, settings)
