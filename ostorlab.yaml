@@ -56,3 +56,12 @@ out_selectors:
   - v3.asset.domain_name
 docker_file_path : Dockerfile
 docker_build_root : .
+args:
+  - name: "reverse_whois"
+    type: "boolean"
+    description: "Enable reverse Whois collection."
+    value: true
+  - name: "subdomain_enumeration"
+    type: "boolean"
+    description: "Enable subdomain collection."
+    value: true
