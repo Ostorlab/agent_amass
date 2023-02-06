@@ -1,5 +1,6 @@
 """Amass network reconnaissance agent implementation."""
 import logging
+from urllib import parse
 
 import tld
 from ostorlab.agent import agent
@@ -68,7 +69,8 @@ class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
             )
             for sub in subdomains:
                 logger.info("Found: %s", sub)
-                self.emit(selector="v3.asset.domain_name", data={"name": sub})
+                domain = self._get_target_from_domain(sub)
+                self.emit(selector="v3.asset.domain_name", data={"name": domain})
         else:
             logger.info(
                 "SUBDOMAIN %s has already been processed. skipping for now.",
@@ -88,11 +90,20 @@ class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
                 logger.info("Found: %s", sub)
                 # Reverse whois lookup will yield the same result for all. This is to avoid processing the same domains.
                 self.set_add(STORAGE_NAME_WHOIS, sub)
-                self.emit(selector="v3.asset.domain_name", data={"name": sub})
+                domain = self._get_target_from_domain(sub)
+                self.emit(selector="v3.asset.domain_name", data={"name": domain})
         else:
             logger.info(
                 "WHOIS %s has already been processed. skipping for now.", domain_name
             )
+
+    def _get_target_from_domain(self, domain: str) -> str:
+        """Get domain from domain_name message"""
+        parsed_domain = parse.urlparse(domain)
+        if len(parsed_domain.netloc.split(":")) > 1:
+            return parsed_domain.netloc.split(":")[0]
+        else:
+            return domain
 
 
 if __name__ == "__main__":
