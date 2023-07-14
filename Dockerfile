@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine as amass_build
+FROM golang:1.19-alpine as amass_build
 RUN apk --no-cache add git
 RUN git clone --depth 1 https://github.com/OWASP/Amass.git /opt/amass \
     && cd /opt/amass \
