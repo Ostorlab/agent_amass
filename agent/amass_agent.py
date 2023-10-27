@@ -63,10 +63,9 @@ class AmassAgent(agent.Agent, agent_persist_mixin.AgentPersistMixin):
             and self.set_add(STORAGE_NAME_SUBDOMAIN, canonalized_domain) is True
         ):
             logger.info("Collecting subdomains using enumeration for %s:", domain_name)
-            subdomains = amass.enum_subdomain(
+            for sub in amass.enum_subdomain(
                 domain_name, timeout=DEFAULT_TIMEOUT_MINUTES
-            )
-            for sub in subdomains:
+            ):
                 logger.info("Found: %s", sub)
                 self.emit(selector="v3.asset.domain_name", data={"name": sub})
         else:
