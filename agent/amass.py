@@ -45,16 +45,13 @@ def enum_subdomain(domain: str, timeout: int | None = None) -> Iterator[str]:
         command.extend(["-timeout", str(timeout)])
 
     # The timeout is not always respected by the amass, we enforce ours on top of it with an extra minute.
-    process = subprocess.Popen(
-        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, shell=True
-    )
-    while True:
-        output = process.stdout.readline()
-        if output == '' and process.poll() is not None:
-            break
-        print("XXX", output)
-        if output:
-            if "FQDN" in output:
-                yield output.strip().split(" ")[0]
-
-
+    with subprocess.Popen(
+        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+    ) as process:
+        while True:
+            output = process.stdout.readline()
+            if output == "" and process.poll() is not None:
+                break
+            if output:
+                if "FQDN" in output:
+                    yield output.strip().split(" ")[0]
