@@ -56,7 +56,13 @@ def test_agent():
             bus_url="NA",
             bus_exchange_topic="NA",
             redis_url="redis://redis",
-            args=[],
+            args=[
+                utils_definitions.Arg(
+                    name="reverse_whois",
+                    value=json.dumps(True).encode(),
+                    type="boolean",
+                ),
+            ],
             healthcheck_port=5302,
         )
         return amass_agent.AmassAgent(definition, settings)

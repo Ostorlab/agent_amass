@@ -60,7 +60,7 @@ args:
   - name: "reverse_whois"
     type: "boolean"
     description: "Enable reverse Whois collection."
-    value: true
+    value: false
   - name: "subdomain_enumeration"
     type: "boolean"
     description: "Enable subdomain collection."
