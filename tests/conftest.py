@@ -1,4 +1,5 @@
 """Pytest fixture for the Amass agent."""
+
 import json
 import pathlib
 
