@@ -1,4 +1,5 @@
 """Amass network reconnaissance agent implementation."""
+
 import logging
 
 import tld

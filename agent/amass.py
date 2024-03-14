@@ -1,4 +1,5 @@
 """Wrapper for amass binary."""
+
 from typing import Iterator
 import subprocess
 
