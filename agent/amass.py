@@ -1,7 +1,7 @@
 """Wrapper for amass binary."""
 
-from typing import Iterator
 import subprocess
+from collections.abc import Iterator
 
 
 def intel_whois(domain: str, timeout: int | None = None) -> list[str]:
@@ -53,6 +53,5 @@ def enum_subdomain(domain: str, timeout: int | None = None) -> Iterator[str]:
             output = process.stdout.readline()
             if output == "" and process.poll() is not None:
                 break
-            if output:
-                if "FQDN" in output:
-                    yield output.strip().split(" ")[0]
+            if output and "FQDN" in output:
+                yield output.strip().split(" ")[0]
